@@ -27,9 +27,9 @@ var arb = λ.environment();
 //       console.log(λ.arb(Number)); // Outputs a random number
 //
 arb = arb
-	.property('AnyVal', AnyVal)
-	.property('Char', Char)
-	.method('arb', λ.strictEquals(AnyVal), function(a, s) {
+    .property('AnyVal', AnyVal)
+    .property('Char', Char)
+    .method('arb', λ.strictEquals(AnyVal), function(a, s) {
         var types = [Boolean, Number, String];
         return this.arb(λ.oneOf(types), s - 1);
     })

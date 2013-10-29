@@ -13,7 +13,7 @@ var shrink = λ.environment();
 //       console.log(λ.shrink([1, 2, 3, 4])); // [[1, 2, 3, 4], [1, 2, 3]]
 //
 shrink = shrink
-	.method('shrink', λ.isArray, function(a) {
+    .method('shrink', λ.isArray, function(a) {
         var accum = [[]],
             x = a.length;
 

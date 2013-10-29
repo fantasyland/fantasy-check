@@ -1,8 +1,8 @@
 var λ = require('fantasy-world'),
-	arb = require('./arb'),
-	shrink = require('./shrink'),
-	Some = λ.Option.Some,
-	None = λ.Option.None;
+    arb = require('./arb'),
+    shrink = require('./shrink'),
+    Some = λ.Option.Some,
+    None = λ.Option.None;
 
 //
 //  # QuickCheck
@@ -30,28 +30,28 @@ var λ = require('fantasy-world'),
 //       )
 //
 function generateInputs(env, args, size) {
-	return args.map(function(arg) {
-		return env.arb(arg, size);
-	});
+    return args.map(function(arg) {
+        return env.arb(arg, size);
+    });
 }
 
 function findSmallest(env, property, inputs) {
-	var shrunken = inputs.map(env.shrink),
-		smallest = [].concat(inputs),
-		args,
-		i, j;
+    var shrunken = inputs.map(env.shrink),
+        smallest = [].concat(inputs),
+        args,
+        i, j;
 
-	for (i = 0; i < shrunken.length; i++) {
-		args = [].concat(smallest);
-		for (j = 0; j < shrunken[i].length; j++) {
-			args[i] = shrunken[i][j];
-			if (property.apply(this, args))
-				break;
-			smallest[i] = shrunken[i][j];
-		}
-	}
+    for (i = 0; i < shrunken.length; i++) {
+        args = [].concat(smallest);
+        for (j = 0; j < shrunken[i].length; j++) {
+            args[i] = shrunken[i][j];
+            if (property.apply(this, args))
+                break;
+            smallest[i] = shrunken[i][j];
+        }
+    }
 
-	return smallest;
+    return smallest;
 }
 
 //
@@ -61,10 +61,10 @@ function findSmallest(env, property, inputs) {
 //  * tries - number of times inputs were tested before Failure
 //
 function failureReporter(inputs, tries) {
-	var self = λ.getInstance(this, failureReporter);
-	self.inputs = inputs;
-	self.tries = tries;
-	return self;
+    var self = λ.getInstance(this, failureReporter);
+    self.inputs = inputs;
+    self.tries = tries;
+    return self;
 }
 
 //
@@ -84,20 +84,20 @@ function failureReporter(inputs, tries) {
 //       );
 //
 function forAll(property, args) {
-	var inputs,
-		i;
+    var inputs,
+        i;
 
-	for (i = 0; i < this.goal; i++) {
-		inputs = generateInputs(this, args, i);
-		if (!property.apply(this, inputs)) {
-			return Some(failureReporter(
-				findSmallest(this, property, inputs),
-				i + 1
-			));
-		}
-	}
+    for (i = 0; i < this.goal; i++) {
+        inputs = generateInputs(this, args, i);
+        if (!property.apply(this, inputs)) {
+            return Some(failureReporter(
+                findSmallest(this, property, inputs),
+                i + 1
+            ));
+        }
+    }
 
-	return None;
+    return None;
 }
 
 
@@ -119,9 +119,9 @@ var goal = 100;
 var check = λ.environment();
 
 check = check
-		.envAppend(arb)
-		.envAppend(shrink)
-	.property('forAll', forAll)
-	.property('goal', goal);
+        .envAppend(arb)
+        .envAppend(shrink)
+    .property('forAll', forAll)
+    .property('goal', goal);
 
 exports = module.exports = check;
