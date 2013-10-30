@@ -1,8 +1,14 @@
-var λ = require('fantasy-world'),
+var Option = require('fantasy-options'),
+    helpers = require('fantasy-helpers'),
+    environment = require('fantasy-environment'),
+
     arb = require('./arb'),
     shrink = require('./shrink'),
-    Some = λ.Option.Some,
-    None = λ.Option.None;
+
+    Some = Option.Some,
+    None = Option.None,
+
+    getInstance = helpers.getInstance;
 
 //
 //  # QuickCheck
@@ -61,7 +67,7 @@ function findSmallest(env, property, inputs) {
 //  * tries - number of times inputs were tested before Failure
 //
 function failureReporter(inputs, tries) {
-    var self = λ.getInstance(this, failureReporter);
+    var self = getInstance(this, failureReporter);
     self.inputs = inputs;
     self.tries = tries;
     return self;
@@ -116,7 +122,7 @@ var goal = 100;
 //
 //  Create a new environment to add the check property to.
 //
-var check = λ.environment();
+var check = environment();
 
 check = check
         .envAppend(arb)

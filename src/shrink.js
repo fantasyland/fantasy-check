@@ -1,19 +1,20 @@
-var λ = require('fantasy-world');
+var helpers = require('fantasy-helpers'),
+    environment = require('fantasy-environment');
 
 //
 //  Create a new environment to add the shrink methods to.
 //
-var shrink = λ.environment();
+var shrink = environment();
 
 //
 //  ### shrink values
 //
 //  Shrinks values for utilizing against checking values.
 //
-//       console.log(λ.shrink([1, 2, 3, 4])); // [[1, 2, 3, 4], [1, 2, 3]]
+//       console.log(helpers.shrink([1, 2, 3, 4])); // [[1, 2, 3, 4], [1, 2, 3]]
 //
 shrink = shrink
-    .method('shrink', λ.isArray, function(a) {
+    .method('shrink', helpers.isArray, function(a) {
         var accum = [[]],
             x = a.length;
 
@@ -24,7 +25,7 @@ shrink = shrink
 
         return accum;
     })
-    .method('shrink', λ.isNumber, function(n) {
+    .method('shrink', helpers.isNumber, function(n) {
         var accum = [0],
             x = n;
 
@@ -37,7 +38,7 @@ shrink = shrink
 
         return accum;
     })
-    .method('shrink', λ.isString, function(s) {
+    .method('shrink', helpers.isString, function(s) {
         var accum = [''],
             x = s.length;
 

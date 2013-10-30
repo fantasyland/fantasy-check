@@ -8,17 +8,23 @@
         "type": "git",
         "url": "https://github.com/SimonRichardson/fantasy-check.git"
     },
+    "dependencies": {
+        "fantasy-helpers": "0.0.x",
+        "fantasy-environment": "0.0.x",
+        "fantasy-options": "0.0.x"
+    },
     "devDependencies": {
         "grunt-cli": "0.1.9",
         "grunt": "0.4.x",
         "grunt-contrib-jshint": "0.6.x",
         "grunt-contrib-nodeunit": "0.2.0",
-        "fantasy-world": "0.0.8"
+        "fantasy-combinators": "0.0.x",
+        "fantasy-tuples": "0.0.x"
     },
     "scripts": {
         "test": "grunt"
     },
     "files": ["fantasy-check.js", "src/*.js"],
     "main": "fantasy-check.js",
-    "version": "0.0.4"
+    "version": "0.0.5"
 }
