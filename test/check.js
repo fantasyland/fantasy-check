@@ -1,4 +1,4 @@
-var λ = require('./lib/test'),
+var λ = require('../src/adapters/nodeunit'),
     isOption = λ.isInstanceOf(λ.Option),
     isSome = function(a) {
         return a.fold(

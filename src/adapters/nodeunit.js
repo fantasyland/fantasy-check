@@ -1,16 +1,18 @@
-var λ = require('../../fantasy-check'),
+var λ = require('../check'),
+
     helpers = require('fantasy-helpers'),
-    C = require('fantasy-combinators'),
+    combinators = require('fantasy-combinators'),
     options = require('fantasy-options'),
     tuples = require('fantasy-tuples');
 
 λ = λ
+  .envConcat({}, combinators)
   .envConcat({}, helpers)
-  .envConcat({}, C)
+  .envConcat({}, tuples)
   .envConcat({}, {
       Option: options
   })
-  .envConcat({}, tuples)
+  
   .property('check', function(property, args) {
       var env = this;
       return function(test) {

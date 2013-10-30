@@ -1,4 +1,4 @@
-var λ = require('./lib/test');
+var λ = require('../src/adapters/nodeunit');
 
 exports.arb = {
     'when testing arb `Array` should return correct value': λ.check(

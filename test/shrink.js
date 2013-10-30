@@ -1,4 +1,4 @@
-var λ = require('./lib/test');
+var λ = require('../src/adapters/nodeunit');
 
 exports.shrink = {
     'when testing shrink for Array should return correct value': function(test) {
