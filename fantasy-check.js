@@ -1,4 +1,3 @@
-var check = require('./src/check'),
-    fantasy = require('fantasy-world');
+var check = require('./src/check');
 
-exports = module.exports = fantasy.envAppend(check);
+exports = module.exports = check;

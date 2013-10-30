@@ -1,6 +1,8 @@
-var λ = require('../../fantasy-check');
+var fantasy = require('fantasy-world'),
+    λ = require('../../fantasy-check');
 
 λ = λ
+  .envAppend(fantasy)
   .property('check', function(property, args) {
       var env = this;
       return function(test) {
