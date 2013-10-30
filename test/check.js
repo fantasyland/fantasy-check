@@ -1,6 +1,6 @@
 var λ = require('./lib/test'),
     isOption = function(a) {
-        return λ.isInstanceOf(λ.Option);
+        return λ.isInstanceOf(λ.Option)(a);
     },
     isSome = function(a) {
         return a.fold(

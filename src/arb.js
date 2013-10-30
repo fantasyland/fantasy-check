@@ -15,6 +15,50 @@ var AnyVal = {};
 var Char = {};
 
 //
+//  ## arrayOf(type)
+//
+//  Sentinel value for when an array of a particular type is needed:
+//
+//       arrayOf(Number)
+//
+function arrayOf(type) {
+    var self = this.getInstance(this, arrayOf);
+    self.type = type;
+    return self;
+}
+
+//
+//  ## objectLike(props)
+//
+//  Sentinel value for when an object with specified properties is
+//  needed:
+//
+//       objectLike({
+//           age: Number,
+//           name: String
+//       })
+//
+function objectLike(props) {
+    var self = this.getInstance(this, objectLike);
+    self.props = props;
+    return self;
+}
+
+//
+//  ## isArrayOf(a)
+//
+//  Returns `true` if `a` is an instance of `arrayOf`.
+//
+var isArrayOf = λ.isInstanceOf(arrayOf);
+
+//
+//  ## isObjectLike(a)
+//
+//  Returns `true` if `a` is an instance of `objectLike`.
+//
+var isObjectLike = λ.isInstanceOf(objectLike);
+
+//
 //  Create a new environment to add the arb methods to.
 //
 var arb = λ.environment();
@@ -29,23 +73,25 @@ var arb = λ.environment();
 arb = arb
     .property('AnyVal', AnyVal)
     .property('Char', Char)
+    .property('arrayOf', arrayOf)
+    .property('objectLike', objectLike)
     .method('arb', λ.strictEquals(AnyVal), function(a, s) {
         var types = [Boolean, Number, String];
-        return this.arb(λ.oneOf(types), s - 1);
+        return this.arb(this.oneOf(types), s - 1);
     })
     .method('arb', λ.strictEquals(Array), function(a, s) {
-        return this.arb(λ.arrayOf(AnyVal), s - 1);
+        return this.arb(this.arrayOf(AnyVal), s - 1);
     })
     .method('arb', λ.strictEquals(Boolean), function(a, s) {
         return Math.random() < 0.5;
     })
     .method('arb', λ.strictEquals(Char), function(a, s) {
         /* Should consider 127 (DEL) to be quite dangerous? */
-        return String.fromCharCode(Math.floor(λ.randomRange(32, 255)));
+        return String.fromCharCode(Math.floor(this.randomRange(32, 255)));
     })
-    .method('arb', λ.isArrayOf, function(a, s) {
+    .method('arb', isArrayOf, function(a, s) {
         var accum = [],
-            length = λ.randomRange(0, s),
+            length = this.randomRange(0, s),
             i;
 
         for(i = 0; i < length; i++) {
@@ -54,7 +100,7 @@ arb = arb
 
         return accum;
     })
-    .method('arb', λ.isObjectLike, function(a, s) {
+    .method('arb', isObjectLike, function(a, s) {
         var o = {},
             i;
 
@@ -75,7 +121,7 @@ arb = arb
     })
     .method('arb', λ.strictEquals(Object), function(a, s) {
         var o = {},
-            length = λ.randomRange(0, s),
+            length = this.randomRange(0, s),
             i;
 
         for(i = 0; i < length; i++) {
@@ -85,7 +131,7 @@ arb = arb
         return o;
     })
     .method('arb', λ.strictEquals(String), function(a, s) {
-        return this.arb(λ.arrayOf(Char), s - 1).join('');
+        return this.arb(this.arrayOf(Char), s - 1).join('');
     });
 
 exports = module.exports = arb;
