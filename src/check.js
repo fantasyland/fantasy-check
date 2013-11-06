@@ -128,6 +128,9 @@ check = check
         .envAppend(arb)
         .envAppend(shrink)
     .property('forAll', forAll)
+    .property('generateInputs', generateInputs)
+    .property('failureReporter', failureReporter)
+    .property('findSmallest', findSmallest)
     .property('goal', goal);
 
 exports = module.exports = check;

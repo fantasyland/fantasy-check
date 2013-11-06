@@ -3,12 +3,14 @@ module.exports = function (grunt) {
             pkg: grunt.file.readJSON('package.json'),
             jshint: {
                 all: [
-                    'src/*.js'
+                    'src/*.js',
+                    'src/adapters/*.js'
                 ]
             },
             nodeunit: {
                 all: [
-                    'test/*.js'
+                    'test/*.js',
+                    'test/adapters/*.js'
                 ]
             }
         };
