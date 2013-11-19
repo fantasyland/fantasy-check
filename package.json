@@ -27,5 +27,5 @@
     },
     "files": ["fantasy-check.js", "src/*.js", "src/adapters/*.js"],
     "main": "fantasy-check.js",
-    "version": "0.0.8"
+    "version": "0.0.9"
 }
