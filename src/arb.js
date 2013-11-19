@@ -138,4 +138,5 @@ arb = arb
         return this.arb(this.arrayOf(Char), s - 1).join('');
     });
 
-exports = module.exports = arb;
+if (typeof module != 'undefined')
+    module.exports = arb;

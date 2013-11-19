@@ -133,4 +133,6 @@ check = check
     .property('findSmallest', findSmallest)
     .property('goal', goal);
 
-exports = module.exports = check;
+if (typeof module != 'undefined')
+    module.exports = check;
+

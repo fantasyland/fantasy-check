@@ -130,4 +130,5 @@ function findSmallest(env, property, inputs) {
       return rec(0);
   });
 
-exports = module.exports = λ;
+if (typeof module != 'undefined')
+    module.exports = λ;

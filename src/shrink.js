@@ -51,4 +51,5 @@ shrink = shrink
         return accum;
     });
 
-exports = module.exports = shrink;
+if (typeof module != 'undefined')
+    module.exports = shrink;
