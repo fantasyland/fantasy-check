@@ -19,7 +19,8 @@
         "grunt-cli": "0.1.9",
         "grunt": "0.4.x",
         "grunt-contrib-jshint": "0.6.x",
-        "grunt-contrib-nodeunit": "0.2.0"
+        "grunt-contrib-nodeunit": "0.2.0",
+        "daggy":"0.0.x"
     },
     "scripts": {
         "test": "grunt"
