@@ -30,6 +30,30 @@ automatically generate lots of inputs:
    )
 ```
 
+### Laws
+
+Fantasy Check allows the easy testing of various laws whilst being
+unit testing framework agnostic.
+
+* [Functors](src/laws/functor.js)
+* More to follow...
+
+#### Functors
+
+The functor check has 2 different laws which allow you to test the
+mapping of tagged types. Note - it should be possible to test 
+functions as well, by providing a map (aka compose) for the function
+type.
+
+Assuming you're using [Fantasy Identities](https://github.com/fantasyland/fantasy-identities)
+and a adapter from the [adapters package](src/adapters) with the unit
+testing framework.
+
+```javascript
+exports.law1 = functor.law1(λ)(Identity.of);
+exports.law2 = functor.law2(λ)(Identity.of);
+```
+
 ## Testing
 
 ### Library
