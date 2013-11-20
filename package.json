@@ -25,7 +25,12 @@
     "scripts": {
         "test": "grunt"
     },
-    "files": ["fantasy-check.js", "src/*.js", "src/adapters/*.js"],
+    "files": [
+        "fantasy-check.js",
+        "src/*.js",
+        "src/adapters/*.js",
+        "src/laws/*.js"
+    ],
     "main": "fantasy-check.js",
-    "version": "0.1.1"
+    "version": "0.1.2"
 }
