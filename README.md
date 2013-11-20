@@ -37,6 +37,7 @@ unit testing framework agnostic.
 
 * [Functors](src/laws/functor.js)
 * [Applicative Functors](src/laws/applicative.js)
+* [Monads](src/laws/monad.js)
 * More to follow...
 
 Assuming you're using [Fantasy Identities](https://github.com/fantasyland/fantasy-identities)
@@ -73,6 +74,21 @@ exports.law1 = functor.identity(λ)(Identity);
 exports.law2 = functor.composition(λ)(Identity);
 exports.law3 = functor.homomorphism(λ)(Identity);
 exports.law4 = functor.interchange(λ)(Identity);
+```
+
+#### Monads
+
+The monad check has 3 different laws which allow you
+to test:
+
+* Left Identity
+* Right Identity
+* Associativity
+
+```javascript
+exports.law1 = functor.leftIdentity(λ)(Identity);
+exports.law2 = functor.rightIdentity(λ)(Identity);
+exports.law3 = functor.associativity(λ)(Identity);
 ```
 
 ## Testing
