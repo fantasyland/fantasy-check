@@ -1,38 +1,16 @@
 var combinators = require('fantasy-combinators'),
+    equality = require('./../equality'),
 
     compose = combinators.compose,
-    identity = combinators.identity,
-
-    foldLeft = function(a, v, f) {
-        var i;
-        for (i = 0; i < a.length; i++) {
-            v = f(v, a[i]);
-        }
-        return v;
-    },
-    zipWith = function(a, b) {
-        var accum = [],
-            total = Math.min(a.length, b.length),
-            i;
-        for(i = 0; i<total; i++) {
-            accum[i] = [a[i], b[i]];
-        }
-        return accum;
-    },
-    equality = function(a, b) {
-        var x = Object.keys(a),
-            y = Object.keys(b);
-
-        return foldLeft(zipWith(x, y), true, function(a, b) {
-            return a && b[0] === b[1];
-        });
-    };
+    identity = combinators.identity;
 
 function law1(λ) {
     return function(create) {
         return λ.check(
             function(a) {
-                return equality(create(a).map(identity), create(a));
+                var x = create(a).map(identity),
+                    y = create(a);
+                return equality(x, y);
             },
             [λ.AnyVal]
         );
@@ -54,6 +32,6 @@ function law2(λ) {
 
 if (typeof module != 'undefined')
     module.exports = {
-        law1: law1,
-        law2: law2
+        identity: law1,
+        composition: law2
     };

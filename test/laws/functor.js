@@ -15,9 +15,9 @@ Id.prototype.map = function(f) {
 };
 
 exports.law1 = {
-    'when mapping identity over a functor value, should return original functor value': functor.law1(λ)(Id.of)
+    'Identity (Functor)': functor.identity(λ)(Id.of)
 };
 
 exports.law2 = {
-    'when composing two functions and then mapping the result function over a functor should be same as mapping one function over the functor and then mapping the other one': functor.law2(λ)(Id.of)
+    'Composition (Functor)': functor.composition(λ)(Id.of)
 };
