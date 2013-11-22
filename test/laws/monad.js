@@ -1,6 +1,9 @@
 var λ = require('../../src/adapters/nodeunit'),
     monad = require('../../src/laws/monad'),
+    combinators = require('fantasy-combinators'),
     daggy = require('daggy'),
+
+    identity = combinators.identity,
 
     Id = daggy.tagged('x');
 
@@ -10,8 +13,8 @@ Id.prototype.chain = function(f) {
 };
 
 exports.laws = {
-    'All (Monad)': monad.laws(λ)(Id),
-    'Left Identity (Monad)': monad.leftIdentity(λ)(Id),
-    'Right Identity (Monad)': monad.rightIdentity(λ)(Id),
-    'Associativity (Monad)': monad.associativity(λ)(Id)
+    'All (Monad)': monad.laws(λ)(Id, identity),
+    'Left Identity (Monad)': monad.leftIdentity(λ)(Id, identity),
+    'Right Identity (Monad)': monad.rightIdentity(λ)(Id, identity),
+    'Associativity (Monad)': monad.associativity(λ)(Id, identity)
 };

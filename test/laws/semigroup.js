@@ -1,6 +1,9 @@
 var λ = require('../../src/adapters/nodeunit'),
     semigroup = require('../../src/laws/semigroup'),
+    combinators = require('fantasy-combinators'),
     daggy = require('daggy'),
+
+    identity = combinators.identity,
 
     List = daggy.taggedSum({
         Cons: ['car', 'cdr'],
@@ -27,6 +30,6 @@ List.prototype.concat = function(a) {
 };
 
 exports.laws = {
-    'All (Semigroup)': semigroup.laws(λ)(List.of),
-    'Associativity (Semigroup)': semigroup.associativity(λ)(List.of)
+    'All (Semigroup)': semigroup.laws(λ)(List.of, identity),
+    'Associativity (Semigroup)': semigroup.associativity(λ)(List.of, identity)
 };

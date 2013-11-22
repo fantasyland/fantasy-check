@@ -1,6 +1,9 @@
 var λ = require('../../src/adapters/nodeunit'),
     applicative = require('../../src/laws/applicative'),
+    combinators = require('fantasy-combinators'),
     daggy = require('daggy'),
+
+    identity = combinators.identity,
 
     /* Replace this when we've got fantasy-identities >= 0.0.2 */
     Id = daggy.tagged('x');
@@ -21,9 +24,9 @@ Id.prototype.map = function(f) {
 };
 
 exports.laws = {
-    'All (Applicative)': applicative.laws(λ)(Id),
-    'Identity (Applicative)': applicative.identity(λ)(Id),
-    'Composition (Applicative)': applicative.composition(λ)(Id),
-    'Homomorphism (Applicative)': applicative.homomorphism(λ)(Id),
-    'Interchange (Applicative)': applicative.interchange(λ)(Id)
+    'All (Applicative)': applicative.laws(λ)(Id, identity),
+    'Identity (Applicative)': applicative.identity(λ)(Id, identity),
+    'Composition (Applicative)': applicative.composition(λ)(Id, identity),
+    'Homomorphism (Applicative)': applicative.homomorphism(λ)(Id, identity),
+    'Interchange (Applicative)': applicative.interchange(λ)(Id, identity)
 };

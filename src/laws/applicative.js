@@ -8,68 +8,68 @@ var combinators = require('fantasy-combinators'),
     identity = combinators.identity,
     thrush = combinators.thrush;
 
-function id(type) {
+function id(type, f) {
     return function(a) {
         var x = type.of(identity).ap(type.of(a)),
             y = type.of(a);
-        return equality(x, y);
+        return equality(f(x), f(y));
     };
 }
 
-function composition(type) {
+function composition(type, f) {
     return function(a) {
         var x = type.of(compose).ap(type.of(identity)).ap(type.of(identity)).ap(type.of(a)),
             y = type.of(identity).ap(type.of(identity).ap(type.of(a)));
-        return equality(x, y);
+        return equality(f(x), f(y));
     };
 }
 
-function homomorphism(type) {
+function homomorphism(type, f) {
     return function(a) {
         var x = type.of(identity).ap(type.of(a)),
             y = type.of(identity(a));
-        return equality(x, y);
+        return equality(f(x), f(y));
     };
 }
 
-function interchange(type) {
+function interchange(type, f) {
     return function(a) {
         var x = type.of(identity).ap(type.of(a)),
             y = type.of(thrush(a)).ap(type.of(identity));
-        return equality(x, y);
+        return equality(f(x), f(y));
     };
 }
 
 function law1(λ) {
-    return function(type) {
-        return λ.check(id(type), [λ.AnyVal]);
+    return function(type, f) {
+        return λ.check(id(type, f), [λ.AnyVal]);
     };
 }
 
 function law2(λ) {
-    return function(type) {
-        return λ.check(composition(type), [λ.AnyVal]);
+    return function(type, f) {
+        return λ.check(composition(type, f), [λ.AnyVal]);
     };
 }
 
 function law3(λ) {
-    return function(type) {
-        return λ.check(homomorphism(type), [λ.AnyVal]);
+    return function(type, f) {
+        return λ.check(homomorphism(type, f), [λ.AnyVal]);
     };
 }
 
 function law4(λ) {
-    return function(type) {
-        return λ.check(interchange(type), [λ.AnyVal]);
+    return function(type, f) {
+        return λ.check(interchange(type, f), [λ.AnyVal]);
     };
 }
 
 function laws(λ) {
-    return function(type) {
-        var x = [   id(type),
-                    composition(type),
-                    homomorphism(type),
-                    interchange(type)];
+    return function(type, f) {
+        var x = [   id(type, f),
+                    composition(type, f),
+                    homomorphism(type, f),
+                    interchange(type, f)];
         return λ.check(
             function(v) {
                 return foldLeft(x, true, function(a, b) {

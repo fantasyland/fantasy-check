@@ -6,7 +6,7 @@ var combinators = require('fantasy-combinators'),
     apply = combinators.apply,
     identity = combinators.identity;
 
-function associativity(create) {
+function associativity(create, f) {
     return function(a, b, c) {
         var i = create(a),
             j = create(b),
@@ -14,19 +14,19 @@ function associativity(create) {
 
             x = i.concat(j).concat(k),
             y = i.concat(j.concat(k));
-        return x === y;
+        return f(x) === f(y);
     };
 }
 
 function law1(λ) {
-    return function(create) {
-        return λ.check(associativity(create), [λ.AnyVal, λ.AnyVal, λ.AnyVal]);
+    return function(create, f) {
+        return λ.check(associativity(create, f), [λ.AnyVal, λ.AnyVal, λ.AnyVal]);
     };
 }
 
 function laws(λ) {
-    return function(create) {
-        var x = [associativity(create)];
+    return function(create, f) {
+        var x = [associativity(create, f)];
         return λ.check(
             function(v) {
                 return foldLeft(x, true, function(a, b) {

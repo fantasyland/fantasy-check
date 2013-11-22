@@ -1,6 +1,9 @@
 var λ = require('../../src/adapters/nodeunit'),
     functor = require('../../src/laws/functor'),
+    combinators = require('fantasy-combinators'),
     daggy = require('daggy'),
+
+    identity = combinators.identity,
 
     Id = daggy.tagged('x');
 
@@ -15,7 +18,7 @@ Id.prototype.map = function(f) {
 };
 
 exports.laws = {
-    'All (Functor)': functor.laws(λ)(Id.of),
-    'Identity (Functor)': functor.identity(λ)(Id.of),
-    'Composition (Functor)': functor.composition(λ)(Id.of)
+    'All (Functor)': functor.laws(λ)(Id.of, identity),
+    'Identity (Functor)': functor.identity(λ)(Id.of, identity),
+    'Composition (Functor)': functor.composition(λ)(Id.of, identity)
 };
