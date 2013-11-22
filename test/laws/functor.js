@@ -14,10 +14,8 @@ Id.prototype.map = function(f) {
     });
 };
 
-exports.law1 = {
-    'Identity (Functor)': functor.identity(λ)(Id.of)
-};
-
-exports.law2 = {
+exports.laws = {
+    'All (Functor)': functor.laws(λ)(Id.of),
+    'Identity (Functor)': functor.identity(λ)(Id.of),
     'Composition (Functor)': functor.composition(λ)(Id.of)
 };

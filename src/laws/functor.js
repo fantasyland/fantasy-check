@@ -1,29 +1,49 @@
 var combinators = require('fantasy-combinators'),
-    equality = require('./../equality'),
+    helpers = require('./../helpers'),
+
+    equality = helpers.equality,
+    foldLeft = helpers.foldLeft,
 
     compose = combinators.compose,
     identity = combinators.identity;
 
+function id(create) {
+    return function(a) {
+        var x = create(a).map(identity),
+            y = create(a);
+        return equality(x, y);
+    };
+}
+
+function composition(create) {
+    return function(a) {
+        var x = create(a).map(compose(identity)(identity)),
+            y = create(a).map(identity).map(identity);
+        return equality(x, y);
+    };
+}
+
 function law1(λ) {
     return function(create) {
-        return λ.check(
-            function(a) {
-                var x = create(a).map(identity),
-                    y = create(a);
-                return equality(x, y);
-            },
-            [λ.AnyVal]
-        );
+        return λ.check(id(create), [λ.AnyVal]);
     };
 }
 
 function law2(λ) {
     return function(create) {
+        return λ.check(composition(create), [λ.AnyVal]);
+    };
+}
+
+function laws(λ) {
+    return function(create) {
+        var x = [   id(create),
+                    composition(create)];
         return λ.check(
-            function(a) {
-                var x = create(a).map(compose(identity, identity)),
-                    y = create(a).map(identity).map(identity);
-                return equality(x, y);
+            function(v) {
+                return foldLeft(x, true, function(a, b) {
+                    return a && b(v);
+                });
             },
             [λ.AnyVal]
         );
@@ -33,5 +53,6 @@ function law2(λ) {
 if (typeof module != 'undefined')
     module.exports = {
         identity: law1,
-        composition: law2
+        composition: law2,
+        laws: laws
     };

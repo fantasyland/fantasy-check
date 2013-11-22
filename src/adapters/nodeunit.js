@@ -73,6 +73,8 @@ function findSmallest(env, property, inputs) {
 
           test.ok(result._1, result._2);
           test.done();
+
+          return test;
       };
   })
   .property('async', function(property, args) {

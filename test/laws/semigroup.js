@@ -26,6 +26,7 @@ List.prototype.concat = function(a) {
 	return result;
 };
 
-exports.law1 = {
+exports.laws = {
+    'All (Semigroup)': semigroup.laws(λ)(List.of),
     'Associativity (Semigroup)': semigroup.associativity(λ)(List.of)
 };

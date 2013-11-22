@@ -9,14 +9,9 @@ Id.prototype.chain = function(f) {
     return f(this.x);
 };
 
-exports.law1 = {
-    'Left Identity (Monad)': monad.leftIdentity(λ)(Id)
-};
-
-exports.law2 = {
-    'Right Identity (Monad)': monad.rightIdentity(λ)(Id)
-};
-
-exports.law3 = {
+exports.laws = {
+    'All (Monad)': monad.laws(λ)(Id),
+    'Left Identity (Monad)': monad.leftIdentity(λ)(Id),
+    'Right Identity (Monad)': monad.rightIdentity(λ)(Id),
     'Associativity (Monad)': monad.associativity(λ)(Id)
 };

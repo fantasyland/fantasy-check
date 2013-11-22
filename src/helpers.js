@@ -1,3 +1,4 @@
+// [TODO] - Move these out when we get a fantasy-lists
 var foldLeft = function(a, v, f) {
         var i;
         for (i = 0; i < a.length; i++) {
@@ -15,8 +16,12 @@ var foldLeft = function(a, v, f) {
         return accum;
     },
     equality = function(a, b) {
-        var x = Object.keys(a),
-            y = Object.keys(b);
+        var x = Object.keys(a).sort().map(function(v) {
+                return a[v];
+            }),
+            y = Object.keys(b).sort().map(function(v) {
+                return b[v];
+            });
 
         return foldLeft(zipWith(x, y), true, function(a, b) {
             return a && b[0] === b[1];
@@ -24,4 +29,8 @@ var foldLeft = function(a, v, f) {
     };
 
 if (typeof module != 'undefined')
-    module.exports = equality;
+    module.exports = {
+        equality: equality,
+        foldLeft: foldLeft,
+        zipWith: zipWith
+    };
