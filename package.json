@@ -20,6 +20,7 @@
         "grunt": "0.4.x",
         "grunt-contrib-jshint": "0.6.x",
         "grunt-contrib-nodeunit": "0.2.0",
+        "fantasy-identities": "0.0.x",
         "daggy":"0.0.x"
     },
     "scripts": {
@@ -32,5 +33,5 @@
         "src/laws/*.js"
     ],
     "main": "fantasy-check.js",
-    "version": "0.1.4"
+    "version": "0.1.5"
 }

@@ -1,13 +1,15 @@
 var λ = require('../../src/adapters/nodeunit'),
     semigroup = require('../../src/laws/semigroup'),
     combinators = require('fantasy-combinators'),
-    daggy = require('daggy'),
-
     identity = combinators.identity,
 
-    Option = require('fantasy-options');
+    Sum = require('./../instances/sum'),
+    Product = require('./../instances/product');
 
 exports.laws = {
-    'All (Semigroup)': semigroup.laws(λ)(Option.of, identity),
-    'Associativity (Semigroup)': semigroup.associativity(λ)(Option.of, identity)
+    'All (Semigroup) - Sum': semigroup.laws(λ)(Sum.of, identity),
+    'Associativity (Semigroup) - Sum': semigroup.associativity(λ)(Sum.of, identity),
+
+    'All (Semigroup) - Product': semigroup.laws(λ)(Product.of, identity),
+    'Associativity (Semigroup) - Product': semigroup.associativity(λ)(Product.of, identity)    
 };

@@ -5,7 +5,23 @@ var combinators = require('fantasy-combinators'),
     equality = helpers.equality,
 
     apply = combinators.apply,
-    identity = combinators.identity;
+    identity = combinators.identity,
+
+    Integer = {};
+
+function make(λ) {
+    return λ
+        .property('Integer', Integer)
+        .method('arb',
+            function(a) {
+                return Integer === a;
+            },
+            function(a, b) {
+                var variance = (Math.pow(2, 32) - 1) / this.goal;
+                return this.randomRange(-variance, variance) | 0;
+            }
+        );
+}
 
 function associativity(create, f) {
     return function(a, b, c) {
@@ -20,21 +36,23 @@ function associativity(create, f) {
 }
 
 function law1(λ) {
+    var _ = make(λ);
     return function(create, f) {
-        return λ.check(associativity(create, f), [String, String, String]);
+        return _.check(associativity(create, f), [Integer, Integer, Integer]);
     };
 }
 
 function laws(λ) {
+    var _ = make(λ);
     return function(create, f) {
         var x = [associativity(create, f)];
-        return λ.check(
+        return _.check(
             function(a, b, c) {
                 return foldLeft(x, true, function(v, f) {
                     return v && f(a, b, c);
                 });
             },
-            [String, String, String]
+            [Integer, Integer, Integer]
         );
     };
 }
