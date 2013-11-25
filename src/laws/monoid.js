@@ -1,10 +1,15 @@
 var combinators = require('fantasy-combinators'),
-    helpers = require('./../helpers'),
+    helpers = require('./helpers'),
 
     equality = helpers.equality,
     foldLeft = helpers.foldLeft,
+    invoke = helpers.invoke,
+
+    integerEnv = helpers.integerEnv,
+    tuple3OfEnv = helpers.tuple3OfEnv,
 
     apply = combinators.apply,
+    compose = combinators.compose,
     identity = combinators.identity;
 
 function leftIdentity(type, f) {
@@ -23,29 +28,53 @@ function rightIdentity(type, f) {
     };
 }
 
+function associativity(type, f) {
+    return function(a, b, c) {
+        var i = type.of(a),
+            j = type.of(b),
+            k = type.of(c),
+
+            x = i.concat(j).concat(k),
+            y = i.concat(j.concat(k));
+        return equality(f(x), f(y));
+    };
+}
+
 function law1(λ) {
+    var _ = integerEnv(λ);
     return function(type, f) {
-        return λ.check(leftIdentity(type, f), [Number]);
+        return _.check(leftIdentity(type, f), [_.Integer]);
     };
 }
 
 function law2(λ) {
+    var _ = integerEnv(λ);
     return function(type, f) {
-        return λ.check(rightIdentity(type, f), [Number]);
+        return _.check(rightIdentity(type, f), [_.Integer]);
+    };
+}
+
+function law3(λ) {
+    var _ = integerEnv(λ);
+    return function(type, f) {
+        return _.check(associativity(type, f), [_.Integer, _.Integer, _.Integer]);
     };
 }
 
 function laws(λ) {
+    var _ = compose(tuple3OfEnv)(integerEnv)(λ);
     return function(type, f) {
         var x = [   leftIdentity(type, f),
-                    rightIdentity(type, f)];
-        return λ.check(
-            function(v) {
+                    rightIdentity(type, f),
+                    associativity(type, f)];
+        return _.check(
+            function(t) {
+                var f = invoke([t._1, t._2, t._3]);
                 return foldLeft(x, true, function(a, b) {
-                    return a && b(v);
+                    return a && f(b);
                 });
             },
-            [Number]
+            [_.tuple3Of(_.Integer, _.Integer, _.Integer)]
         );
     };
 }
@@ -54,5 +83,6 @@ if (typeof module != 'undefined')
     module.exports = {
         leftIdentity: law1,
         rightIdentity: law2,
+        associativity: law3,
         laws: laws
     };

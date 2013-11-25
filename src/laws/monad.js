@@ -1,5 +1,5 @@
 var combinators = require('fantasy-combinators'),
-    helpers = require('./../helpers'),
+    helpers = require('./helpers'),
 
     equality = helpers.equality,
     foldLeft = helpers.foldLeft,
