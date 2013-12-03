@@ -1,4 +1,6 @@
-var Tuple3 = require('fantasy-tuples').Tuple3,
+var tuples = require('fantasy-tuples'),
+    Tuple2 = tuples.Tuple2,
+    Tuple3 = tuples.Tuple3,
     functionLength = require('fantasy-helpers').functionLength,
 
     Integer = {},
@@ -49,7 +51,7 @@ var Tuple3 = require('fantasy-tuples').Tuple3,
             });
 
         return foldLeft(zipWith(x, y), true, function(a, b) {
-            return a && b[0] === b[1];
+            return a && b._1 === b._2;
         });
     },
 
@@ -66,7 +68,7 @@ var Tuple3 = require('fantasy-tuples').Tuple3,
             total = Math.min(a.length, b.length),
             i;
         for(i = 0; i<total; i++) {
-            accum[i] = [a[i], b[i]];
+            accum[i] = Tuple2(a[i], b[i]);
         }
         return accum;
     };
