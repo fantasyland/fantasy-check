@@ -1,7 +1,9 @@
 var combinators = require('fantasy-combinators'),
     helpers = require('./helpers'),
 
-    foldLeft = helpers.foldLeft,
+    seqs = require('fantasy-seqs'),
+    Seq = seqs.Seq,
+    
     equality = helpers.equality,
     integerEnv = helpers.integerEnv,
 
@@ -33,7 +35,7 @@ function laws(λ) {
         var x = [associativity(create, f)];
         return _.check(
             function(a, b, c) {
-                return foldLeft(x, true, function(v, f) {
+                return Seq.fromArray(x).fold(true, function(v, f) {
                     return v && f(a, b, c);
                 });
             },

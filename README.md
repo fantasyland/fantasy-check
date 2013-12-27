@@ -2,6 +2,8 @@
 
 ![](https://raw.github.com/puffnfresh/fantasy-land/master/logo.png)
 
+![](https://api.travis-ci.org/SimonRichardson/fantasy-check.png)
+
 ## General
 
 QuickCheck is a form of *automated specification testing*. Instead

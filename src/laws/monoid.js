@@ -1,8 +1,10 @@
 var combinators = require('fantasy-combinators'),
     helpers = require('./helpers'),
 
+    seqs = require('fantasy-seqs'),
+    Seq = seqs.Seq,
+
     equality = helpers.equality,
-    foldLeft = helpers.foldLeft,
     invoke = helpers.invoke,
 
     integerEnv = helpers.integerEnv,
@@ -70,7 +72,7 @@ function laws(λ) {
         return _.check(
             function(t) {
                 var f = invoke([t._1, t._2, t._3]);
-                return foldLeft(x, true, function(a, b) {
+                return Seq.fromArray(x).fold(true, function(a, b) {
                     return a && f(b);
                 });
             },

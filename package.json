@@ -13,7 +13,8 @@
         "fantasy-environment": "0.0.x",
         "fantasy-options": "0.0.x",
         "fantasy-combinators": "0.0.x",
-        "fantasy-tuples": "0.0.x"
+        "fantasy-tuples": "0.0.x",
+        "fantasy-seqs": "0.x.x"
     },
     "devDependencies": {
         "grunt-cli": "0.1.9",
@@ -33,5 +34,5 @@
         "src/laws/*.js"
     ],
     "main": "fantasy-check.js",
-    "version": "0.1.6"
+    "version": "0.1.7"
 }

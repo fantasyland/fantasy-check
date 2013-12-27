@@ -3,6 +3,9 @@ var tuples = require('fantasy-tuples'),
     Tuple3 = tuples.Tuple3,
     functionLength = require('fantasy-helpers').functionLength,
 
+    seqs = require('fantasy-seqs'),
+    Seq = seqs.Seq,
+
     Integer = {},
     integerEnv = function(λ) {
         return λ
@@ -48,29 +51,13 @@ var tuples = require('fantasy-tuples'),
             }),
             y = Object.keys(b).sort().map(function(v) {
                 return b[v];
-            });
+            }),
+            xx = Seq.fromArray(x),
+            yy = Seq.fromArray(y);
 
-        return foldLeft(zipWith(x, y), true, function(a, b) {
+        return xx.zip(yy).fold(true, function(a, b) {
             return a && b._1 === b._2;
         });
-    },
-
-    // [TODO] - Move these out when we get a fantasy-lists
-    foldLeft = function(a, v, f) {
-        var i;
-        for (i = 0; i < a.length; i++) {
-            v = f(v, a[i]);
-        }
-        return v;
-    },
-    zipWith = function(a, b) {
-        var accum = [],
-            total = Math.min(a.length, b.length),
-            i;
-        for(i = 0; i<total; i++) {
-            accum[i] = Tuple2(a[i], b[i]);
-        }
-        return accum;
     };
 
 if (typeof module != 'undefined')
@@ -78,7 +65,5 @@ if (typeof module != 'undefined')
         integerEnv: integerEnv,
         tuple3OfEnv: tuple3OfEnv,
         equality: equality,
-        invoke: invoke,
-        foldLeft: foldLeft,
-        zipWith: zipWith
+        invoke: invoke
     };

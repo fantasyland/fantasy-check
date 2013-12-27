@@ -1,9 +1,10 @@
 var combinators = require('fantasy-combinators'),
     helpers = require('./helpers'),
+    
+    seqs = require('fantasy-seqs'),
+    Seq = seqs.Seq,
 
     equality = helpers.equality,
-    foldLeft = helpers.foldLeft,
-
     compose = combinators.compose,
     identity = combinators.identity;
 
@@ -41,7 +42,7 @@ function laws(λ) {
                     composition(create, f)];
         return λ.check(
             function(v) {
-                return foldLeft(x, true, function(a, b) {
+                return Seq.fromArray(x).fold(true, function(a, b) {
                     return a && b(v);
                 });
             },
