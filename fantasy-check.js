@@ -24,4 +24,5 @@ var check = require('./src/check'),
         semigroup: semigroup
     });
 
-exports = module.exports = λ;
+if (typeof module != 'undefined')
+    module.exports = λ;
