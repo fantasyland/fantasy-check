@@ -2,7 +2,8 @@
 
 ![](https://raw.github.com/puffnfresh/fantasy-land/master/logo.png)
 
-![](https://api.travis-ci.org/SimonRichardson/fantasy-check.png)
+[![Build Status](https://api.travis-ci.org/SimonRichardson/fantasy-check.png)](https://travis-ci.org/SimonRichardson/fantasy-check)
+[![Dependencies Status](https://david-dm.org/SimonRichardson/fantasy-check.png)](https://david-dm.org/SimonRichardson/fantasy-check)
 
 ## General
 
