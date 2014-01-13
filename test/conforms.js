@@ -5,6 +5,15 @@ var λ = require('../src/adapters/nodeunit'),
     constant = λ.constant;
 
 exports.conforms = {
+    'should report correct value': function(test) {
+        var a = Check.of('a')
+            .when(rules.MinLength(1))
+            .when(rules.MaxLength(10))
+            .when(rules.Required(true))
+            .exec();
+        test.ok(a.s === 'a');
+        test.done();
+    },
     'when testing conformation of a array': λ.check(
         function(a) {
             return Check.of(a)

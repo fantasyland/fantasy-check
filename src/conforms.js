@@ -7,6 +7,8 @@ var daggy = require('daggy'),
     Validation = require('fantasy-validations'),
 
     compose = combinators.compose,
+    constant = combinators.constant,
+    identity = combinators.identity,
     isString = helpers.isString,
     isArray = helpers.isArray,
 
@@ -57,39 +59,45 @@ Check.prototype.when = function(x) {
 
 Check.prototype.exec = function() {
     return this.fold(function(a) {
-        var val = a._1;
         return a._2.map(function(b) {
-            return b.validate(val);
+            return b.validate(a._1);
         }).reduce(function(x, y) {
-            return x.ap(y);
+            return x.fold(
+                function() {
+                    return x.ap(y);
+                },
+                function(z) {
+                    return Validation.of(constant(z)).ap(y);
+                }
+            );
         });
     });
 };
 
 Min.prototype.validate = function(a) {
     return a >= this.x ?
-        Validation.Success(Seq.of(a)) :
+        Validation.Success(a) :
         Validation.Failure(['Expected value to be greater than ' + this.x]);
 };
 Max.prototype.validate = function(a) {
     return a < this.x ?
-        Validation.Success(Seq.of(a)) :
+        Validation.Success(a) :
         Validation.Failure(['Expected value to be less than ' + this.x]);
 };
 MinLength.prototype.validate = function(a) {
     return a.length >= this.x ?
-        Validation.Success(Seq.of(a)) :
+        Validation.Success(a) :
         Validation.Failure(['Expected length to be greater than ' + this.x]);
 };
 MaxLength.prototype.validate = function(a) {
     return a.length < this.x ?
-        Validation.Success(Seq.of(a)) :
+        Validation.Success(a) :
         Validation.Failure(['Expected length to be less than ' + this.x]);
 };
 Required.prototype.validate = function(a) {
     var b = !!a;
     return b === this.x ?
-        Validation.Success(Seq.of(a)) :
+        Validation.Success(a) :
         Validation.Failure(['Expected required value, but received ' + this.x]);
 };
 TypeOf.prototype.validate = function(a) {
