@@ -3,6 +3,7 @@ var Option = require('fantasy-options'),
     environment = require('fantasy-environment'),
 
     arb = require('./arb'),
+    conforms = require('./conforms'),
     shrink = require('./shrink'),
 
     Some = Option.Some,
@@ -127,6 +128,7 @@ var check = environment();
 check = check
         .envAppend(arb)
         .envAppend(shrink)
+        .envAppend(conforms)
     .property('forAll', forAll)
     .property('generateInputs', generateInputs)
     .property('failureReporter', failureReporter)

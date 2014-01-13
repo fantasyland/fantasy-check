@@ -1,14 +1,16 @@
 var check = require('./src/check'),
-    // Adapters.
+    // Adapters
     jasmine = require('./src/adapters/jasmine'),
     mocha = require('./src/adapters/mocha'),
     nodeunit = require('./src/adapters/nodeunit'),
-    // Laws.
+    // Laws
     applicative = require('./src/laws/applicative'),
     functor = require('./src/laws/functor'),
     monad = require('./src/laws/monad'),
     monoid = require('./src/laws/monoid'),
-    semigroup = require('./src/laws/semigroup');
+    semigroup = require('./src/laws/semigroup'),
+    // Conforms
+    conforms = require('./src/conforms');
 
 λ = check
     .property('adapters', {
