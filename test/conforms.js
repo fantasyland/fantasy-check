@@ -11,7 +11,41 @@ exports.conforms = {
             .when(rules.MaxLength(10))
             .when(rules.Required(true))
             .exec();
-        test.ok(a.s === 'a');
+        test.equal(a.s, 'a');
+        test.done();
+    },
+    'should report first incorrect value': function(test) {
+        var a = Check.of('a')
+            .when(rules.MinLength(10))
+            .when(rules.MaxLength(10))
+            .when(rules.Required(true))
+            .exec();
+        test.deepEqual(a.f, ['Expected length to be greater than 10']);
+        test.done();
+    },
+    'should report first and second incorrect value': function(test) {
+        var a = Check.of('a')
+            .when(rules.MinLength(10))
+            .when(rules.MaxLength(0))
+            .when(rules.Required(true))
+            .exec();
+        test.deepEqual(a.f, [
+            'Expected length to be greater than 10',
+            'Expected length to be less than 0'
+        ]);
+        test.done();
+    },
+    'should report first, second and third incorrect value': function(test) {
+        var a = Check.of('a')
+            .when(rules.MinLength(10))
+            .when(rules.MaxLength(0))
+            .when(rules.Required(false))
+            .exec();
+        test.deepEqual(a.f, [
+            'Expected length to be greater than 10',
+            'Expected length to be less than 0',
+            'Expected required value, but received false'
+        ]);
         test.done();
     },
     'when testing conformation of a array': λ.check(

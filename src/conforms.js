@@ -102,7 +102,7 @@ Required.prototype.validate = function(a) {
 };
 TypeOf.prototype.validate = function(a) {
     return typeof a === this.x ?
-        Validation.Success(Seq.of(a)) :
+        Validation.Success(a) :
         Validation.Failure(['Expected type of ' + this.x]);
 };
 
