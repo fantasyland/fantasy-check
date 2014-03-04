@@ -5,6 +5,7 @@ var check = require('./src/check'),
     nodeunit = require('./src/adapters/nodeunit'),
     // Laws
     applicative = require('./src/laws/applicative'),
+    comonad = require('./src/laws/comonad'),
     functor = require('./src/laws/functor'),
     monad = require('./src/laws/monad'),
     monoid = require('./src/laws/monoid'),
@@ -20,6 +21,7 @@ var check = require('./src/check'),
     })
     .property('laws', {
         applicative: applicative,
+        comonad: comonad,
         functor: functor,
         monad: monad,
         monoid: monoid,
