@@ -1,4 +1,5 @@
-var tuples = require('fantasy-tuples'),
+var eq = require('fantasy-equality'),
+    tuples = require('fantasy-tuples'),
     Tuple2 = tuples.Tuple2,
     Tuple3 = tuples.Tuple3,
     functionLength = require('fantasy-helpers').functionLength,
@@ -46,18 +47,7 @@ var tuples = require('fantasy-tuples'),
         };
     },
     equality = function(a, b) {
-        var x = Object.keys(a).sort().map(function(v) {
-                return a[v];
-            }),
-            y = Object.keys(b).sort().map(function(v) {
-                return b[v];
-            }),
-            xx = Seq.fromArray(x),
-            yy = Seq.fromArray(y);
-
-        return xx.zip(yy).fold(true, function(a, b) {
-            return a && b._1 === b._2;
-        });
+        return eq.equals(a, b);
     };
 
 if (typeof module != 'undefined')

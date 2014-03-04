@@ -15,7 +15,8 @@
         "fantasy-combinators": "0.0.x",
         "fantasy-tuples": "0.0.x",
         "fantasy-seqs": "0.x.x",
-        "fantasy-validations": "0.x.x"
+        "fantasy-validations": "0.x.x",
+        "fantasy-equality": "0.x.x"
     },
     "devDependencies": {
         "grunt-cli": "0.1.9",
@@ -23,6 +24,7 @@
         "grunt-contrib-jshint": "0.6.x",
         "grunt-contrib-nodeunit": "0.2.0",
         "fantasy-identities": "git+https://github.com/SimonRichardson/fantasy-identities.git",
+        "fantasy-lenses": "0.x.x",
         "daggy":"0.0.x"
     },
     "scripts": {
