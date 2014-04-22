@@ -25,7 +25,7 @@
         "grunt-contrib-jshint": "0.6.x",
         "grunt-contrib-nodeunit": "0.2.0",
         "fantasy-identities": "git+https://github.com/SimonRichardson/fantasy-identities.git",
-        "fantasy-lenses": "0.x.x",
+        "fantasy-lenses": "0.x.x"
     },
     "scripts": {
         "test": "grunt"
