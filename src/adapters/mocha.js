@@ -21,14 +21,11 @@ var λ = require('../check'),
           var report = env.forAll(property, args),
               result = report.fold(
                   function(fail) {
-                      return 'Failed after ' + fail.tries + ' tries: ' + fail.inputs.toString();
+                      throw new Error('Failed after ' + fail.tries + ' tries: ' + fail.inputs.toString());
                   },
                   function() {
-                      return 'OK';
                   }
               );
-
-          assert.equal(result == 'OK');
       };
   });
 
