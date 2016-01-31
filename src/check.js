@@ -1,15 +1,11 @@
-var Option = require('fantasy-options'),
-    helpers = require('fantasy-helpers'),
-    environment = require('fantasy-environment'),
+'use strict';
 
-    arb = require('./arb'),
-    conforms = require('./conforms'),
-    shrink = require('./shrink'),
+const {Some, None} = require('fantasy-options');
+const {getInstance} = require('fantasy-helpers');
+const environment = require('fantasy-environment');
 
-    Some = Option.Some,
-    None = Option.None,
-
-    getInstance = helpers.getInstance;
+const arb = require('./arb');
+const shrink = require('./shrink');
 
 //
 //  # QuickCheck
@@ -37,9 +33,7 @@ var Option = require('fantasy-options'),
 //       )
 //
 function generateInputs(env, args, size) {
-    return args.map(function(arg) {
-        return env.arb(arg, size);
-    });
+    return args.map((arg) => env.arb(arg, size));
 }
 
 function findSmallest(env, property, inputs) {
@@ -68,7 +62,7 @@ function findSmallest(env, property, inputs) {
 //  * tries - number of times inputs were tested before Failure
 //
 function failureReporter(inputs, tries) {
-    var self = getInstance(this, failureReporter);
+    const self = getInstance(this, failureReporter);
     self.inputs = inputs;
     self.tries = tries;
     return self;
@@ -118,14 +112,14 @@ function forAll(property, args) {
 //
 //  Default is `100`.
 //
-var goal = 100;
+const goal = 100;
 
 //
 //  Create a new environment to add the check property to.
 //
-var check = environment();
+const check = environment();
 
-check = check
+module.exports = check
         .envAppend(arb)
         .envAppend(shrink)
         .envAppend(conforms)
@@ -134,7 +128,3 @@ check = check
     .property('failureReporter', failureReporter)
     .property('findSmallest', findSmallest)
     .property('goal', goal);
-
-if (typeof module != 'undefined')
-    module.exports = check;
-

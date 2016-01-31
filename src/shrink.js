@@ -1,10 +1,12 @@
-var helpers = require('fantasy-helpers'),
-    environment = require('fantasy-environment');
+'use strict';
+
+const {isArray, isBoolean, isNumber, isString} = require('fantasy-helpers');
+const environment = require('fantasy-environment');
 
 //
 //  Create a new environment to add the shrink methods to.
 //
-var shrink = environment();
+const shrink = environment();
 
 //
 //  ### shrink values
@@ -13,8 +15,8 @@ var shrink = environment();
 //
 //       console.log(helpers.shrink([1, 2, 3, 4])); // [[1, 2, 3, 4], [1, 2, 3]]
 //
-shrink = shrink
-    .method('shrink', helpers.isArray, function(a) {
+module.exports = shrink
+    .method('shrink', isArray, a => {
         var accum = [[]],
             x = a.length;
 
@@ -25,7 +27,10 @@ shrink = shrink
 
         return accum;
     })
-    .method('shrink', helpers.isNumber, function(n) {
+    .method('shrink', isBoolean, n => {
+        return [!n]; 
+    })
+    .method('shrink', isNumber, n => {
         var accum = [0],
             x = n;
 
@@ -38,7 +43,7 @@ shrink = shrink
 
         return accum;
     })
-    .method('shrink', helpers.isString, function(s) {
+    .method('shrink', isString, s => {
         var accum = [''],
             x = s.length;
 
@@ -50,6 +55,3 @@ shrink = shrink
 
         return accum;
     });
-
-if (typeof module != 'undefined')
-    module.exports = shrink;

@@ -1,19 +1,19 @@
-var check = require('./src/check'),
-    // Adapters
-    jasmine = require('./src/adapters/jasmine'),
-    mocha = require('./src/adapters/mocha'),
-    nodeunit = require('./src/adapters/nodeunit'),
-    // Laws
-    applicative = require('./src/laws/applicative'),
-    comonad = require('./src/laws/comonad'),
-    functor = require('./src/laws/functor'),
-    monad = require('./src/laws/monad'),
-    monoid = require('./src/laws/monoid'),
-    semigroup = require('./src/laws/semigroup'),
-    // Conforms
-    conforms = require('./src/conforms');
+const check = require('./src/check');
+// Adapter
+const jasmine = require('./src/adapters/jasmine');
+const mocha = require('./src/adapters/mocha');
+const nodeunit = require('./src/adapters/nodeunit');
+// Law
+const applicative = require('./src/laws/applicative');
+const comonad = require('./src/laws/comonad');
+const functor = require('./src/laws/functor');
+const monad = require('./src/laws/monad');
+const monoid = require('./src/laws/monoid');
+const semigroup = require('./src/laws/semigroup');
+// Conform
+const conforms = require('./src/conforms');
 
-λ = check
+module.exports = check
     .property('adapters', {
         jasmine: jasmine,
         mocha: mocha,
@@ -27,6 +27,3 @@ var check = require('./src/check'),
         monoid: monoid,
         semigroup: semigroup
     });
-
-if (typeof module != 'undefined')
-    module.exports = λ;

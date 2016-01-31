@@ -1,24 +1,18 @@
-var daggy = require('daggy'),
+'use strict';
 
-    Sum = daggy.tagged('x');
+const {tagged} = require('daggy'),
+const Sum = tagged('x');
 
 Sum.of = Sum;
-Sum.empty = Sum.of.bind(null, 0);
+Sum.empty = () => Sum(0);
 Sum.prototype.chain = function(f) {
     return f(this.x);
 };
 Sum.prototype.concat = function(x) {
-    return this.chain(function(a) {
-        return x.map(function(b) {
-            return a + b;
-        });
-    });
+    return this.chain(a => x.map(b => a + b));
 };
 Sum.prototype.map = function(f) {
-    return this.chain(function(x) {
-        return Sum.of(f(x));
-    });
+    return this.chain(x => Sum.of(f(x)));
 };
 
-if(typeof module != 'undefined')
-    module.exports = Sum;
+module.exports = Sum;

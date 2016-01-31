@@ -1,9 +1,11 @@
-var λ = require('../check'),
+'use strict';
 
-    helpers = require('fantasy-helpers'),
-    combinators = require('fantasy-combinators'),
-    options = require('fantasy-options'),
-    tuples = require('fantasy-tuples');
+const λ = require('../check');
+
+const helpers = require('fantasy-helpers');
+const combinators = require('fantasy-combinators');
+const options = require('fantasy-options');
+const tuples = require('fantasy-tuples');
 
 //
 //  ### findSmallest
@@ -11,40 +13,35 @@ var λ = require('../check'),
 //  Finds the smallest value for a async check
 //
 function findSmallest(env, property, inputs) {
-    var shrunken = inputs.map(env.shrink),
-        smallest = [].concat(inputs);
+    const shrunken = inputs.map(env.shrink);
+    const smallest = [].concat(inputs);
 
-    return function(f) {
-        var resolve = function(index, num) {
-                return function(result) {
-                    if (result) {
-                        rec(index + 1);
-                    } else {
-                        smallest[index] = shrunken[index][num];
-                        rec(index, num + 1);
-                    }
-                };
-            },
-            rec = function(index, num) {
-                var resolver;
-                if (index < shrunken.length) {
-                    args = [].concat(smallest);
-                    if (num < shrunken[index].length) {
-                        args[index] = shrunken[index][num];
-                        resolver = property.apply(env, [resolve(index, num)]);
-                        resolver.apply(env, args);
-                    } else {
-                        rec(index + 1);
-                    }
+    return f => {
+        const modify = (index, num) => {
+            smallest[index] = shrunken[index][num];
+            go(index, num + 1);
+        };
+        const resolve = (index, num) => {
+            return result => (result) ? go(index + 1) : modify(index, num);
+        };
+        const go = function(index, num) {
+            var resolver;
+            if (index < shrunken.length) {
+                args = [].concat(smallest);
+                if (num < shrunken[index].length) {
+                    args[index] = shrunken[index][num];
+                    resolver = property.apply(env, [resolve(index, num)]);
+                    resolver.apply(env, args);
                 } else {
-                    f(smallest);
+                    go(index + 1);
                 }
-            };
-        rec(0, 0);
+            } else f(smallest);
+        };
+        go(0, 0);
     };
 }
 
-λ = λ
+module.exports = λ
   .envConcat({}, combinators)
   .envConcat({}, helpers)
   .envConcat({}, tuples)
@@ -53,23 +50,17 @@ function findSmallest(env, property, inputs) {
   })
   
   .property('check', function(property, args) {
-      var env = this;
-      return function(test) {
-          var report = env.forAll(property, args),
-              result = report.fold(
-                  function(fail) {
-                      return env.Tuple2(
-                          false,
-                          'Failed after ' + fail.tries + ' tries: ' + fail.inputs.toString()
-                      );
-                  },
-                  function() {
-                      return env.Tuple2(
-                          true,
-                          'OK'
-                      );
-                  }
-              );
+      return test => {
+          const report = this.forAll(property, args);
+          const result = report.fold(
+              (fail) => {
+                  return this.Tuple2(
+                      false,
+                      'Failed after ' + fail.tries + ' tries: ' + fail.inputs.toString()
+                  );
+              },
+              () => this.Tuple2(true, 'OK')
+          );
 
           test.ok(result._1, result._2);
           test.done();
@@ -78,59 +69,41 @@ function findSmallest(env, property, inputs) {
       };
   })
   .property('async', function(property, args) {
-      var env = this,
-          resolve = function(index, test) {
-              return function(result) {
-                  failureReporter(result, inputs, index)(
-                      function(x) {
-                          x.fold(
-                              function(fail) {
-                                  test.ok(false, 'Failed after ' + fail.tries + ' tries: ' + fail.inputs.toString());
-                                  test.done();
-                              },
-                              function() {
-                                  rec(index + 1)(test);
-                              }
-                          );
+      const resolve = (index, test) => {
+          return result => {
+              failureReporter(result, inputs, index)(
+                  x => x.fold(
+                      fail => {
+                          test.ok(false, 'Failed after ' + fail.tries + ' tries: ' + fail.inputs.toString());
+                          test.done();
+                      },
+                      () => rec(index + 1)(test)
+                  );
+              );
+          };
+      };
+      const failureReporter = (result, inputs, index) => {
+          return resolve => {
+              if (!result) {
+                  findSmallest(this, property, inputs)(
+                      result => {
+                          resolve(this.Option.Some(this.failureReporter(result, index + 1)));
                       }
                   );
-              };
-          },
-          failureReporter = function(result, inputs, index) {
-              return function(resolve) {
-                  if (!result) {
-                      findSmallest(env, property, inputs)(
-                          function(result) {
-                              resolve(
-                                  env.Option.Some(
-                                      env.failureReporter(
-                                          result,
-                                          index + 1
-                                      )
-                                  )
-                              );
-                          }
-                      );
-                  } else {
-                      resolve(env.Option.None);
-                  }
-              };
-          },
-          rec = function(index) {
-              return function(test) {
-                  var resolver;
-                  if (index < env.goal) {
-                      inputs = env.generateInputs(env, args, index);
-                      resolver = property.apply(env, [resolve(index, test)]);
-                      resolver.apply(this, inputs);
-                  } else {
-                      test.ok(true, 'OK');
-                      test.done();
-                  }
-              };
+              } else resolve(this.Option.None);
           };
-      return rec(0);
+      };
+      const go = index => {
+          return test => {
+              if (index < this.goal) {
+                  const inputs = this.generateInputs(this, args, index);
+                  const resolver = property.apply(this, [resolve(index, test)]);
+                  resolver.apply(this, inputs);
+              } else {
+                  test.ok(true, 'OK');
+                  test.done();
+              }
+          };
+      };
+      return go(0);
   });
-
-if (typeof module != 'undefined')
-    module.exports = λ;

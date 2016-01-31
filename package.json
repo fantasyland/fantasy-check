@@ -9,6 +9,7 @@
         "url": "https://github.com/fantasyland/fantasy-check.git"
     },
     "dependencies": {
+        "fantasy-land": "git+https://github.com/fantasyland/fantasy-land.git",
         "fantasy-helpers": "0.0.x",
         "fantasy-environment": "0.0.x",
         "fantasy-options": "0.0.x",
@@ -17,18 +18,15 @@
         "fantasy-seqs": "0.x.x",
         "fantasy-validations": "0.x.x",
         "fantasy-equality": "0.x.x",
-        "daggy":"0.0.x"
+        "daggy":"0.x.x"
     },
     "devDependencies": {
-        "grunt-cli": "0.1.9",
-        "grunt": "0.4.x",
-        "grunt-contrib-jshint": "0.6.x",
-        "grunt-contrib-nodeunit": "0.2.0",
+        "nodeunit": "0.9.0",
         "fantasy-identities": "git+https://github.com/fantasyland/fantasy-identities.git",
         "fantasy-lenses": "0.x.x"
     },
     "scripts": {
-        "test": "grunt"
+        "test": "node --harmony_destructuring node_modules/.bin/nodeunit test/*.js"
     },
     "files": [
         "fantasy-check.js",
@@ -37,5 +35,5 @@
         "src/laws/*.js"
     ],
     "main": "fantasy-check.js",
-    "version": "0.3.2"
+    "version": "0.4.0"
 }

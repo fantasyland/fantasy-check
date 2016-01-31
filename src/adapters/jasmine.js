@@ -1,11 +1,13 @@
-var λ = require('../check'),
+'use strict';
 
-    helpers = require('fantasy-helpers'),
-    combinators = require('fantasy-combinators'),
-    options = require('fantasy-options'),
-    tuples = require('fantasy-tuples');
+const λ = require('../check');
 
-λ = λ
+const helpers = require('fantasy-helpers');
+const combinators = require('fantasy-combinators');
+const options = require('fantasy-options');
+const tuples = require('fantasy-tuples');
+
+module.exports = λ
   .envConcat({}, combinators)
   .envConcat({}, helpers)
   .envConcat({}, tuples)
@@ -14,21 +16,13 @@ var λ = require('../check'),
   })
   
   .property('check', function(property, args) {
-      var env = this;
-      return function() {
-          var report = env.forAll(property, args),
-              result = report.fold(
-                  function(fail) {
-                      return 'Failed after ' + fail.tries + ' tries: ' + fail.inputs.toString();
-                  },
-                  function() {
-                      return 'OK';
-                  }
-              );
+      return () => {
+          const report = this.forAll(property, args);
+          const result = report.fold(
+              fail => 'Failed after ' + fail.tries + ' tries: ' + fail.inputs.toString(),
+              () => 'OK'
+          );
 
           expect(result).toBe('OK');
       };
   });
-
-if (typeof module != 'undefined')
-    module.exports = λ;
