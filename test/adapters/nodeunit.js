@@ -1,33 +1,27 @@
-var λ = require('../../src/adapters/nodeunit');
+'use strict';
+
+const λ = require('../../src/adapters/nodeunit');
 
 exports.check = {
-    'when testing arb `Array` should return correct value': function(test) {
+    'when testing arb `Array` should return correct value': test => {
         λ.check(
-            function(a) {
-                return λ.isArray(a);
-            },
+            a => λ.isArray(a),,
             [Array]
         )({
-            ok: function(result) {
-                test.ok(result);
-            },
-            done: function() {
+            ok: result => test.ok(result),
+            done: () => {
                 test.expect(1);
                 test.done();
             }
         });
     },
-    'when testing arb `Array` should return incorrect value': function(test) {
+    'when testing arb `Array` should return incorrect value': test => {
         λ.check(
-            function(a) {
-                return λ.isNumber(a);
-            },
+            a => λ.isNumber(a),
             [Array]
         )({
-            ok: function(result) {
-                test.ok(!result);
-            },
-            done: function() {
+            ok: result => test.ok(!result),
+            done: () => {
                 test.expect(1);
                 test.done();
             }
@@ -36,37 +30,25 @@ exports.check = {
 };
 
 exports.async = {
-    'when testing arb `Array` should return correct value': function(test) {
+    'when testing arb `Array` should return correct value': test => {
         λ.async(
-            function(resolve) {
-                return function(a) {
-                    resolve(λ.isArray(a));
-                };
-            },
+            resolve => a => resolve(λ.isArray(a)),
             [Array]
         )({
-            ok: function(result) {
-                test.ok(result);
-            },
-            done: function() {
+            ok: result => test.ok(result),
+            done: () => {
                 test.expect(1);
                 test.done();
             }
         });
     },
-    'when testing arb `Array` should return incorrect value': function(test) {
+    'when testing arb `Array` should return incorrect value': test => {
         λ.async(
-            function(resolve) {
-                return function(a) {
-                    resolve(λ.isNumber(a));
-                };
-            },
+            resolve => a => resolve(λ.isNumber(a)),
             [Array]
         )({
-            ok: function(result) {
-                test.ok(!result);
-            },
-            done: function() {
+            ok: result => test.ok(!result),
+            done: () => {
                 test.expect(1);
                 test.done();
             }

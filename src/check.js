@@ -1,15 +1,12 @@
-var Option = require('fantasy-options'),
-    helpers = require('fantasy-helpers'),
-    environment = require('fantasy-environment'),
+'use strict';
 
-    arb = require('./arb'),
-    conforms = require('./conforms'),
-    shrink = require('./shrink'),
+const {Some, None} = require('fantasy-options');
+const {getInstance} = require('fantasy-helpers');
+const environment = require('fantasy-environment');
 
-    Some = Option.Some,
-    None = Option.None,
-
-    getInstance = helpers.getInstance;
+const arb = require('./arb');
+const shrink = require('./shrink');
+const law = require('./law');
 
 //
 //  # QuickCheck
@@ -37,23 +34,20 @@ var Option = require('fantasy-options'),
 //       )
 //
 function generateInputs(env, args, size) {
-    return args.map(function(arg) {
-        return env.arb(arg, size);
-    });
+    return args.map(arg => env.arb(arg, size));
 }
 
 function findSmallest(env, property, inputs) {
-    var shrunken = inputs.map(env.shrink),
-        smallest = [].concat(inputs),
-        args,
-        i, j;
+    let shrunken = inputs.map(env.shrink);
+    let smallest = [].concat(inputs);
 
-    for (i = 0; i < shrunken.length; i++) {
-        args = [].concat(smallest);
-        for (j = 0; j < shrunken[i].length; j++) {
+    for (let i = 0; i < shrunken.length; i++) {
+        let args = [].concat(smallest);
+        for (let j = 0; j < shrunken[i].length; j++) {
             args[i] = shrunken[i][j];
-            if (property.apply(this, args))
+            if (property.apply(env, args)) {
                 break;
+            }
             smallest[i] = shrunken[i][j];
         }
     }
@@ -68,7 +62,7 @@ function findSmallest(env, property, inputs) {
 //  * tries - number of times inputs were tested before Failure
 //
 function failureReporter(inputs, tries) {
-    var self = getInstance(this, failureReporter);
+    const self = getInstance(this, failureReporter);
     self.inputs = inputs;
     self.tries = tries;
     return self;
@@ -91,7 +85,7 @@ function failureReporter(inputs, tries) {
 //       );
 //
 function forAll(property, args) {
-    var inputs,
+    let inputs,
         i;
 
     for (i = 0; i < this.goal; i++) {
@@ -118,23 +112,19 @@ function forAll(property, args) {
 //
 //  Default is `100`.
 //
-var goal = 100;
+const goal = 100;
 
 //
 //  Create a new environment to add the check property to.
 //
-var check = environment();
+const check = environment();
 
-check = check
+module.exports = check
         .envAppend(arb)
         .envAppend(shrink)
-        .envAppend(conforms)
+    .property('law', law)
     .property('forAll', forAll)
     .property('generateInputs', generateInputs)
     .property('failureReporter', failureReporter)
     .property('findSmallest', findSmallest)
     .property('goal', goal);
-
-if (typeof module != 'undefined')
-    module.exports = check;
-

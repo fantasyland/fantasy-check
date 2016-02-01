@@ -1,22 +1,21 @@
-var helpers = require('fantasy-helpers'),
-    environment = require('fantasy-environment'),
-    
-    strictEquals = helpers.strictEquals,
-    isInstanceOf = helpers.isInstanceOf;
+'use strict';
 
+const {strictEquals, isInstanceOf} = require('fantasy-helpers');
+const environment = require('fantasy-environment');
+    
 //
 //  ## AnyVal
 //
 //  Sentinel value for when any type of primitive value is needed.
 //
-var AnyVal = {};
+const AnyVal = {};
 
 //
 //  ## Char
 //
 //  Sentinel value for when a single character string is needed.
 //
-var Char = {};
+const Char = {};
 
 //
 //  ## arrayOf(type)
@@ -26,7 +25,7 @@ var Char = {};
 //       arrayOf(Number)
 //
 function arrayOf(type) {
-    var self = this.getInstance(this, arrayOf);
+    const self = this.getInstance(this, arrayOf);
     self.type = type;
     return self;
 }
@@ -43,7 +42,7 @@ function arrayOf(type) {
 //       })
 //
 function objectLike(props) {
-    var self = this.getInstance(this, objectLike);
+    const self = this.getInstance(this, objectLike);
     self.props = props;
     return self;
 }
@@ -53,19 +52,19 @@ function objectLike(props) {
 //
 //  Returns `true` if `a` is an instance of `arrayOf`.
 //
-var isArrayOf = isInstanceOf(arrayOf);
+const isArrayOf = isInstanceOf(arrayOf);
 
 //
 //  ## isObjectLike(a)
 //
 //  Returns `true` if `a` is an instance of `objectLike`.
 //
-var isObjectLike = isInstanceOf(objectLike);
+const isObjectLike = isInstanceOf(objectLike);
 
 //
 //  Create a new environment to add the arb methods to.
 //
-var arb = environment();
+const arb = environment();
 
 //
 //  ### arbitrary values
@@ -74,13 +73,13 @@ var arb = environment();
 //
 //       console.log(λ.arb(Number)); // Outputs a random number
 //
-arb = arb
+module.exports = arb
     .property('AnyVal', AnyVal)
     .property('Char', Char)
     .property('arrayOf', arrayOf)
     .property('objectLike', objectLike)
     .method('arb', strictEquals(AnyVal), function(a, s) {
-        var types = [Boolean, Number, String];
+        const types = [Boolean, Number, String];
         return this.arb(this.oneOf(types), s - 1);
     })
     .method('arb', strictEquals(Array), function(a, s) {
@@ -94,19 +93,18 @@ arb = arb
         return String.fromCharCode(Math.floor(this.randomRange(32, 255)));
     })
     .method('arb', isArrayOf, function(a, s) {
-        var accum = [],
-            length = this.randomRange(0, s),
-            i;
+        var accum = [];
+        var i;
 
-        for(i = 0; i < length; i++) {
+        for(i = 0; i < this.randomRange(0, s); i++) {
             accum.push(this.arb(a.type, s - 1));
         }
 
         return accum;
     })
     .method('arb', isObjectLike, function(a, s) {
-        var o = {},
-            i;
+        var o = {};
+        var i;
 
         for(i in a.props) {
             o[i] = this.arb(a.props[i], s);
@@ -120,15 +118,14 @@ arb = arb
           a Number overflow (worst case Infinity), meaning we can
           add multiple arb(Number) together without issues.
         */
-        var variance = Math.pow(2, 53) / this.goal;
+        const variance = Math.pow(2, 53) / this.goal;
         return this.randomRange(-variance, variance);
     })
     .method('arb', strictEquals(Object), function(a, s) {
-        var o = {},
-            length = this.randomRange(0, s),
-            i;
+        var o = {};
+        var i;
 
-        for(i = 0; i < length; i++) {
+        for(i = 0; i < this.randomRange(0, s); i++) {
             o[this.arb(String, s - 1)] = this.arb(AnyVal, s - 1);
         }
 
@@ -137,6 +134,3 @@ arb = arb
     .method('arb', strictEquals(String), function(a, s) {
         return this.arb(this.arrayOf(Char), s - 1).join('');
     });
-
-if (typeof module != 'undefined')
-    module.exports = arb;
