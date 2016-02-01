@@ -17,7 +17,7 @@ const shrink = environment();
 //
 module.exports = shrink
     .method('shrink', isArray, a => {
-        var accum = [[]],
+        let accum = [[]],
             x = a.length;
 
         while(x) {
@@ -31,7 +31,7 @@ module.exports = shrink
         return [!n]; 
     })
     .method('shrink', isNumber, n => {
-        var accum = [0],
+        let accum = [0],
             x = n;
 
         while(x) {
@@ -44,7 +44,7 @@ module.exports = shrink
         return accum;
     })
     .method('shrink', isString, s => {
-        var accum = [''],
+        let accum = [''],
             x = s.length;
 
         while(x) {

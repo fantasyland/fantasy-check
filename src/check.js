@@ -6,6 +6,7 @@ const environment = require('fantasy-environment');
 
 const arb = require('./arb');
 const shrink = require('./shrink');
+const law = require('./law');
 
 //
 //  # QuickCheck
@@ -33,21 +34,20 @@ const shrink = require('./shrink');
 //       )
 //
 function generateInputs(env, args, size) {
-    return args.map((arg) => env.arb(arg, size));
+    return args.map(arg => env.arb(arg, size));
 }
 
 function findSmallest(env, property, inputs) {
-    var shrunken = inputs.map(env.shrink),
-        smallest = [].concat(inputs),
-        args,
-        i, j;
+    let shrunken = inputs.map(env.shrink);
+    let smallest = [].concat(inputs);
 
-    for (i = 0; i < shrunken.length; i++) {
-        args = [].concat(smallest);
-        for (j = 0; j < shrunken[i].length; j++) {
+    for (let i = 0; i < shrunken.length; i++) {
+        let args = [].concat(smallest);
+        for (let j = 0; j < shrunken[i].length; j++) {
             args[i] = shrunken[i][j];
-            if (property.apply(this, args))
+            if (property.apply(env, args)) {
                 break;
+            }
             smallest[i] = shrunken[i][j];
         }
     }
@@ -85,7 +85,7 @@ function failureReporter(inputs, tries) {
 //       );
 //
 function forAll(property, args) {
-    var inputs,
+    let inputs,
         i;
 
     for (i = 0; i < this.goal; i++) {
@@ -122,7 +122,7 @@ const check = environment();
 module.exports = check
         .envAppend(arb)
         .envAppend(shrink)
-        .envAppend(conforms)
+    .property('law', law)
     .property('forAll', forAll)
     .property('generateInputs', generateInputs)
     .property('failureReporter', failureReporter)

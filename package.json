@@ -9,7 +9,7 @@
         "url": "https://github.com/fantasyland/fantasy-check.git"
     },
     "dependencies": {
-        "fantasy-land": "git+https://github.com/fantasyland/fantasy-land.git",
+        "fantasy-land": "0.2.x",
         "fantasy-helpers": "0.0.x",
         "fantasy-environment": "0.0.x",
         "fantasy-options": "0.0.x",

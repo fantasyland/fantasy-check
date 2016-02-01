@@ -49,17 +49,18 @@ exports.forAll = {
         test.done();
     },
     'when testing forAll with failure should return correct inputs': test => {
-        const index = 0;
+        let index = 0;
+        
         const finder = [];
         const reporter = λ.forAll(
-                (s) => {
-                    if (++index > (this.goal / 2)) {
-                        finder.push(s);
-                        return false;
-                    } else return true;
-                },
-                [String]
-            );
+            function(s) {
+                if (++index == (this.goal / 2)) {
+                    finder.push(s);
+                    return false;
+                } else return true;
+            },
+            [String]
+        );
         test.deepEqual(finder, reporter.x.inputs);
         test.done();
     }
