@@ -2,6 +2,8 @@
 
 const {Some, None} = require('fantasy-options');
 const {getInstance} = require('fantasy-helpers');
+const equality = require('fantasy-equality');
+
 const environment = require('fantasy-environment');
 
 const arb = require('./arb');
@@ -122,6 +124,7 @@ const check = environment();
 module.exports = check
         .envAppend(arb)
         .envAppend(shrink)
+        .envAppend(equality)
     .property('law', law)
     .property('forAll', forAll)
     .property('generateInputs', generateInputs)
